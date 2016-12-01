@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>OC_Sync</title>
+            </f:facet>
+        </h:head>
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">   
+                </p:layoutUnit>
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    Footer
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form>      
+                        <p:wizard  step="1" showNavBar="false" widgetVar="pipeline" >
+                            <p:tab id="map" title="Study mapping"  />
+                            <p:tab id="subjects" title="Subjects" />
+                            <p:tab id="confirm" title="Confirmation"/>
+                        </p:wizard>
+                    </h:form> 
+                    <h:form>      
+                        <p:dataTable var="Study" value="#{StudyView.getlStudy()}" scrollable="true"  emptyMessage="there is no clinical data in this study. ">
+                            <p:column headerText="study OID">
+                                <h:outputText value="#{Study.study_oid}" />
+                            </p:column>
+                            <p:column headerText="Subject unique protocol ID">
+                                <p:dataTable var="Subject" value="#{Study.getlSubject()}" scrollable="true"  emptyMessage="There no subjects in this study. ">
+                                    <p:column>
+                                        <h:outputText value="#{Subject.subjectUd}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form> 
+                    <!--   <h:form>
+                           <p:commandButton value="Download" ajax="false"  icon="ui-icon-arrowthick-1-s">
+                               <p:fileDownload value="" />
+                           </p:commandButton> 
+                       </h:form> -->
+
+                    <h:form>
+                        <p:commandButton value="Confirm" ajax="false"  actionListener="#{CompatibleODMXmlFileGenerateur.generateOdmXmlFile()}" icon="ui-icon-arrowthick-1-s">
+
+                        </p:commandButton> 
+                    </h:form> 
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175">   
+                    <h:form>
+                        <p:growl id="msgs" showDetail="true" widgetVar="ss"  autoUpdate="true"/>
+                        <p:dataTable var="Study" value="#{UserStudyList.getlStudy()}" >
+                            <f:facet name="header">
+                                Select Study
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{Study.study_oid}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>

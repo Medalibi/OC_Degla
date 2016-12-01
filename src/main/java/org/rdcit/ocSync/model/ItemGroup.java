@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rdcit.ocSync.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author sa841
+ */
+public class ItemGroup {
+
+    String itemGroupOID;
+    String itemGroupName;
+    String itemGroupRepeatingKey;
+    List<Item> lItem;
+
+    public ItemGroup(String itemGroupOID) {
+        this.itemGroupOID = itemGroupOID;
+        lItem = new ArrayList();
+    }
+
+    public ItemGroup(String itemGroupOID, String itemGroupRepeatingKey) {
+        this.itemGroupOID = itemGroupOID;
+        this.itemGroupRepeatingKey = itemGroupRepeatingKey;
+        lItem = new ArrayList();
+    }
+
+    public String getItemGroupOID() {
+        return itemGroupOID;
+    }
+
+    public void setItemGroupOID(String itemGroupOID) {
+        this.itemGroupOID = itemGroupOID;
+    }
+
+    public String getItemGroupName() {
+        return itemGroupName;
+    }
+
+    public void setItemGroupName(String itemGroupName) {
+        this.itemGroupName = itemGroupName;
+    }
+
+    public List<Item> getlItem() {
+        return lItem;
+    }
+
+    public void setlItem(List<Item> lItem) {
+        this.lItem = lItem;
+    }
+
+    public void addItem(Item item) {
+        this.lItem.add(item);
+    }
+
+    public String getItemGroupRepeatingKey() {
+        return itemGroupRepeatingKey;
+    }
+
+    public void setItemGroupRepeatingKey(String itemGroupRepeatingKey) {
+        if (itemGroupRepeatingKey.length() < 1) {
+            this.itemGroupRepeatingKey = "0";
+        } else {
+            this.itemGroupRepeatingKey = itemGroupRepeatingKey;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ItemGroup{" + "itemGroupOID=" + itemGroupOID + ", itemGroupName=" + itemGroupName + '}';
+    }
+
+}
