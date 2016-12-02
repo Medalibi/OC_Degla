@@ -5,14 +5,21 @@
  */
 package org.rdcit.ocSync.model;
 
+import javax.faces.bean.ManagedBean;
+
 /**
  *
  * @author sa841
  */
+
+@ManagedBean( name = "Item")
 public class Item {
     String itemName;
     String itemOID;
     String itemValue;
+
+    public Item() {
+    }
 
     
     public Item(String itemOID) {

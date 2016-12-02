@@ -3,82 +3,92 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:form>
-        <p:dataTable var="Structure" value="#{StructureView.getlStructure()}" scrollable="true" emptyMessage="There is no item in the uploaded file that matchs the items of your selected study.">
+
+
+    <h3  style="color: #009688; margin-left: 30px; margin-top: 50px; text-decoration: underline;"> These fields are perfectly mapped with the target study:</h3>
+    <h:form style="margin: 5%">
+        <p:dataTable style="width: 75%" var="Structure" value="#{StructureView.getlStructure()}" scrollable="false" emptyMessage="There is no item in the uploaded file that matchs the items of your selected study."
+                     >
             <f:facet name="header">
                 Strcuture
             </f:facet>
-            <p:column headerText="studyName">
+            <p:column headerText="Study name">
                 <h:outputText value="#{Structure.studyName}" />
             </p:column>
-            <p:column headerText="eventName">
+            <p:column headerText="Event name">
                 <h:outputText value="#{Structure.eventName}" />
             </p:column>
-            <p:column headerText="formName">
+            <p:column headerText="Form name">
                 <h:outputText value="#{Structure.formName}" />
             </p:column>
-            <p:column headerText="itemName">
+            <p:column headerText="Item name">
                 <h:outputText value="#{Structure.itemName}" />
             </p:column>
-            <p:column headerText="">
+            <p:column headerText="" width="5%">
                 <h:graphicImage name="cc.png" />
             </p:column>
         </p:dataTable>
     </h:form>
-    <h3  style="color: #B71C1C; margin-left: 30px; margin-top: 50px; text-decoration: underline;"> These fields are absent in the target study</h3>
-    <h:form>
-        <p:dataTable var="MissingStructure" value="#{MissingStructureView.getlMissingStructure()}" scrollable="true"  emptyMessage="The items of the two studies match perfectly. ">
+
+
+    <h3  style="color: #B71C1C; margin-left: 30px; margin-top: 50px; text-decoration: underline;"> These fields are absent in the target study:</h3>
+    <h:form style="margin: 5%">
+        <p:dataTable style="width: 75%" var="MissingStructure" value="#{MissingStructureView.getlMissingStructure()}" scrollable="false"  emptyMessage="The items of the two studies match perfectly. "
+                     rowStyleClass="#{MissingStructure.missingFieldType == 'Study' ? 'red' : 'old'}">
             <f:facet name="header">
-                Absent fields
+                Inexistant fields
             </f:facet>
-            <p:column headerText="studyName">
+            <p:column headerText="Study name">
                 <h:outputText value="#{MissingStructure.studyName}" />
             </p:column>
-            <p:column headerText="eventName">
+            <p:column headerText="Event name">
                 <h:outputText value="#{MissingStructure.eventName}" />
             </p:column>
-            <p:column headerText="formName">
+            <p:column headerText="Form name">
                 <h:outputText value="#{MissingStructure.formName}" />
             </p:column>
-            <p:column headerText="itemName">
+            <p:column headerText="Item name">
                 <h:outputText value="#{MissingStructure.itemName}" />
             </p:column>
-            <p:column headerText="Absent Type">
+            <p:column headerText="Absent field">
                 <h:outputText value="#{MissingStructure.missingFieldType}" />
             </p:column>
-            <p:column headerText="">
+            <p:column headerText="" width="5%">
                 <h:graphicImage name="cc.png" />
             </p:column>
         </p:dataTable>
     </h:form>
-    <h3  style="color:#009688; margin-left: 30px; margin-top: 50px; text-decoration: underline;">These items will remain empty in the target study:</h3>
-    <h:form>
-        <p:dataTable var="EmptyStructure" value="#{EmptyStructureView.getlEmptyStructure()}" scrollable="true" emptyMessage="All the fields in the target study all filled perfectly.">
+    <h3  style="color:#03A9F4; margin-left: 30px; margin-top: 50px; text-decoration: underline;">These items will remain empty in the target study:</h3>
+    <h:form style="margin: 5%">
+        <p:dataTable style="width: 75%" var="EmptyStructure" value="#{EmptyStructureView.getlEmptyStructure()}" scrollable="false" emptyMessage="All the fields in the target study all filled perfectly.">
             <f:facet name="header">
                 Empty Fields
             </f:facet>
-            <p:column headerText="studyName">
+            <p:column headerText="Study name">
                 <h:outputText value="#{EmptyStructure.studyName}" />
             </p:column>
-            <p:column headerText="eventName">
+            <p:column headerText="Event name">
                 <h:outputText value="#{EmptyStructure.eventName}" />
             </p:column>
-            <p:column headerText="formName">
+            <p:column headerText="Form name">
                 <h:outputText value="#{EmptyStructure.formName}" />
             </p:column>
-            <p:column headerText="itemName">
+            <p:column headerText="Item name">
                 <h:outputText value="#{EmptyStructure.itemName}" />
             </p:column>
-            <p:column headerText="itemName">
+            <p:column headerText="Empty field">
                 <h:outputText value="#{EmptyStructure.emptyFieldType}" />
             </p:column>
-            <p:column headerText="">
-                <h:graphicImage name="cc.png" />
+            <p:column headerText="" width="5%">
+                <h:graphicImage name="cc.png"/>
             </p:column>
         </p:dataTable>
     </h:form>
-    <h:form>
-        <p:commandButton type="submit"  value="Import Subjects"  action="#{ImportSubjectView.redirectTo}" ajax="false"  transient="true"/>
+    <h:form style="margin-left: 30px; margin-top: 50px">
+        <p:messages autoUpdate="true" showDetail="true" for="importSubjectsMSG"/>
+    </h:form>
+    <h:form style="margin-left: 70%; margin-bottom: 20px ">
+        <p:commandButton type="submit"  value="Import Subjects"  action="#{ImportSubjectView.redirectTo}" ajax="false"  disabled="#{MissingStructureView.disableButtonImportSubjects}"/>
     </h:form>
 </ui:composition>
 

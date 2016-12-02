@@ -7,16 +7,21 @@ package org.rdcit.ocSync.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author sa841
  */
+@ManagedBean( name = "StudyEventForm")
 public class StudyEventForm {
 
     String formOID;
     String formName;
     List<ItemGroup> lItemGroup;
+
+    public StudyEventForm() {
+    }
 
     public StudyEventForm(String formOID) {
         this.formOID = formOID;

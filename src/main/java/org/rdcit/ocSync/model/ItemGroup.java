@@ -7,17 +7,22 @@ package org.rdcit.ocSync.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author sa841
  */
+@ManagedBean( name = "ItemGroup")
 public class ItemGroup {
 
     String itemGroupOID;
     String itemGroupName;
     String itemGroupRepeatingKey;
     List<Item> lItem;
+
+    public ItemGroup() {
+    }
 
     public ItemGroup(String itemGroupOID) {
         this.itemGroupOID = itemGroupOID;

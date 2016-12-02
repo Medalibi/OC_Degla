@@ -29,6 +29,7 @@ public class Mapper {
     List<Study> lSourceStudy;
     List<Study> lTargetStudy;
     List<Structure> lStructure;
+    List<Study> lStructure1;
     List<EmptyStructure> lEmptyStructure;
     List<MissingStructure> lMissingStructure;
     List<ImproperStructure> lImproperMissingStructure;
@@ -48,8 +49,9 @@ public class Mapper {
         lImproperMissingStructure = new ArrayList();
         lImproperEmptyStructure = new ArrayList();
         lOIDMapper = new ArrayList();
+        lStructure1 = new ArrayList();
         areTheyMatch = false;
-        resMapping = new Object[4];
+        resMapping = new Object[5];
     }
 
     public List<Structure> getlStructure() {
@@ -140,6 +142,7 @@ public class Mapper {
                             }
                         }
                     }
+                    lStructure1.add(lSourceStudy.get(i));
                     OIDMapper oidMapper = new OIDMapper(lSourceStudy.get(i), lTargetStudy.get(j));
                     lOIDMapper.add(oidMapper);
                     break;
@@ -151,7 +154,7 @@ public class Mapper {
                 }
             }
         }
-       /* System.out.println("############## Structure ######################");
+        /* System.out.println("############## Structure ######################");
         printArray(getlStructure());
         System.out.println("############## EmptyStructure ######################");
         printArray(lEmptyStructure);
@@ -165,6 +168,7 @@ public class Mapper {
         resMapping[1] = lStructure;
         resMapping[2] = lEmptyStructure;
         resMapping[3] = lMissingStructure;
+        resMapping[4] = lStructure1;
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("OIDMapperList", lOIDMapper);
         return resMapping;
     }

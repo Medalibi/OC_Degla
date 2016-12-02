@@ -14,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.apache.commons.io.FilenameUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.rdcit.ocSync.model.UploadedFile;
 
@@ -27,14 +28,18 @@ public class FileUpload {
 
     public String sourcefilePath;
     private final String destination = "C:\\Users\\sa841\\Documents\\";
+    String uploadedFileName; 
+    boolean disableMapButton = true;
 
     public void uploadSourceFile(FileUploadEvent event) {
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
             sourcefilePath = destination + event.getFile().getFileName();
             UploadedFile.sourceUploadedFile = new File(sourcefilePath);
-            FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            FacesMessage message = new FacesMessage(event.getFile().getFileName() , " following the next steps, we will try to upload its data to OpenClinica in the choosen study.");
+            FacesContext.getCurrentInstance().addMessage("fileuploadMSG", message);
+            uploadedFileName = event.getFile().getFileName();
+            setDisableMapButton(false);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -57,4 +62,25 @@ public class FileUpload {
         }
     }
 
+    public String getUploadedFileName() {
+        return uploadedFileName;
+    }
+
+    public void setUploadedFileName(String uploadedFileName) {
+        this.uploadedFileName = uploadedFileName;
+    }
+
+     public void fileUploadName(FileUploadEvent event) {
+      uploadedFileName = FilenameUtils.getName(event.getFile().getFileName());
+    }
+
+    public boolean isDisableMapButton() {
+        return disableMapButton;
+    }
+
+    public void setDisableMapButton(boolean disableMapButton) {
+        this.disableMapButton = disableMapButton;
+    }
+
+     
 }

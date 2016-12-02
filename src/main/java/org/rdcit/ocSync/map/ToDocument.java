@@ -21,6 +21,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -62,5 +63,48 @@ public class ToDocument {
         }
         return document;
     }
+
+    public String elementToString(Element eNode) {
+        String sNode = "";
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            StreamResult result = new StreamResult(new StringWriter());
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource((Node)eNode);
+            transformer.transform(source, result);
+            StringWriter sw = (StringWriter) result.getWriter();
+            StringBuffer sb = sw.getBuffer();
+            sNode = sb.toString();
+            sw.close();
+        } catch (IOException | TransformerException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return sNode;
+    }
+    
+    public String toString(Document doc) {
+        StringWriter sw = null;
+    try {
+        sw = new StringWriter();
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.transform(new DOMSource(doc), new StreamResult(sw));  
+    } catch (IllegalArgumentException | TransformerException ex) {
+        System.out.println(ex.getMessage());
+    }
+     return sw.toString();
+}
+    
+    public String retrieveXMLFormatter(String input) {
+        StringWriter sw = null;
+   input.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+     return sw.toString();
+}
+    
+    
 
 }

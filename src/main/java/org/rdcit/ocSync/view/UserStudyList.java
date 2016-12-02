@@ -60,12 +60,12 @@ public class UserStudyList implements Serializable{
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Car Selected");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Target study", selectedStudy.getStudy_name());
+        FacesContext.getCurrentInstance().addMessage("SelectStudyMSG", msg);
     }
  
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Car Unselected");
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Target study", selectedStudy.getStudy_name());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     

@@ -5,7 +5,12 @@
  */
 package org.rdcit.ocSync.ocws;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -18,32 +23,46 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.rdcit.ocSync.map.ToDocument;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
  * @author sa841
  */
-public class IsStudySubject_ws {
+public class ImportData_ws {
 
-    String studyPUID;
-    String subjectID;
-    String sitePUID;
+    // @ManagedProperty( value= "#{{CompatibleODMXmlFileGenerateur}")
+    //CompatibleODMXmlFileGenerateur CompatibleODMXmlFileGenerateur;
+    File file;
+    Document doc;
 
-    public IsStudySubject_ws(String studyPUID, String subjectID, String sitePUID) {
-        this.studyPUID = studyPUID;
-        this.subjectID = subjectID;
-        this.sitePUID = sitePUID;
-    }
+    public ImportData_ws(Document doc) {
+        this.doc = doc;
+            }
 
-    public IsStudySubject_ws(String studyPUID, String subjectID) {
-        this.studyPUID = studyPUID;
-        this.subjectID = subjectID;
-        this.sitePUID = "";
+    public String fileToString() {
+        String content = "";
+        try {
+            FileReader fr = new FileReader(this.file);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line.trim());
+            }
+            content = sb.toString();
+            System.out.println(content);
+        } catch (IOException ex) {
+            Logger.getLogger(ImportData_ws.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return content; 
     }
 
     public SOAPMessage createSOAPRequest() {
+
         SOAPMessage soapResponse = null;
         try {
             MessageFactory messageFactory = MessageFactory.newInstance();
@@ -52,7 +71,7 @@ public class IsStudySubject_ws {
             String serverURI = "https://openclinica-testing.medschl.cam.ac.uk/OCplay-ws/ws/studySubject/v1/studySubjectWsdl.wsdl";
 
             SOAPEnvelope envelope = soapPart.getEnvelope();
-            envelope.addAttribute(new QName("xmlns:v1"), "http://openclinica.org/ws/studySubject/v1");
+            envelope.addAttribute(new QName("xmlns:v1"), "http://openclinica.org/ws/data/v1");
             envelope.addAttribute(new QName("xmlns:bean"), "http://openclinica.org/ws/beans");
 
             SOAPHeader header = envelope.getHeader();
@@ -68,71 +87,30 @@ public class IsStudySubject_ws {
             SOAPElement password = usernameToken.addChildElement("Password", "wsse");
             password.setAttribute("Type", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText");
             password.addTextNode("32f4a48056b62a73fad8482a3fa502fc35b96701");
-            SOAPElement isStudySubjectRequest = body.addChildElement("isStudySubjectRequest", "v1");
-            SOAPElement studySubject = isStudySubjectRequest.addChildElement("studySubject", "v1");
-            SOAPElement label = studySubject.addChildElement("label", "bean");
-            label.addTextNode(this.subjectID);
-            SOAPElement studyRef = studySubject.addChildElement("studyRef", "bean");
-            SOAPElement identifier = studyRef.addChildElement("identifier", "bean");
-            identifier.addTextNode(this.studyPUID);
-            if (!this.sitePUID.isEmpty()) {
-                SOAPElement siteRef = studySubject.addChildElement("siteRef", "bean");
-                SOAPElement siteRefIdentifier = siteRef.addChildElement("identifier", "bean");
-                siteRefIdentifier.addTextNode(this.sitePUID);
-                studyRef.addChildElement(siteRef);
-            }
+            SOAPElement importRequest = body.addChildElement("importRequest", "v1");
+            SOAPElement odm = importRequest.addChildElement("odm");
+           // SOAPElement ODM = odm.addChildElement("ODM");
+            ToDocument toDocument= new ToDocument();
+            //System.out.println(toDocument.toString(this.doc));
+            String content = toDocument.toString(this.doc).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+            odm.addTextNode(content);
             System.out.println("Elementbody added");
             MimeHeaders headers = soapMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", serverURI + "create");
             soapMessage.saveChanges();
-
+            soapMessage.writeTo(System.out);
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-
             soapResponse = soapConnection.call(soapMessage, serverURI);
+            System.out.println("################# CREATE IMPORT DATA REQUEST  ################################################");
             System.out.print("Request SOAP Message = ");
             soapResponse.writeTo(System.out);
             System.out.println();
+            System.out.println("################# CREATE IMPORT DATA REQUEST ################################################");
         } catch (SOAPException | IOException ex) {
             System.out.println(ex.getMessage());
         }
         return soapResponse;
-    }
-
-    public boolean isStudySubjectExist(SOAPMessage soapResponse) {
-        boolean exist = false;
-        try {
-            NodeList nlODM = soapResponse.getSOAPBody().getElementsByTagName("result");
-            Node nResult = nlODM.item(0);
-            String sResult = nResult.getTextContent();
-            if (sResult.equals("Success")) {
-                exist = true;
-            }
-        } catch (SOAPException ex) {
-            System.out.println(ex.getMessage());
-        }
-          System.out.println("???????????????????????? isStudySubjectExist " + exist);
-        return exist;
-    }
-
-    public String getStudySubjectOID(SOAPMessage soapResponse) {
-        String subjectOID = "";
-        try {
-            NodeList nlODM = soapResponse.getSOAPBody().getElementsByTagName("subjectOID");
-            System.out.println("???????????????????????? studyOID nlODM" + nlODM.getLength());
-            Node nResult = nlODM.item(0);
-            subjectOID = nResult.getTextContent();   
-        } catch (SOAPException ex) {
-            System.out.println(ex.getMessage());
-        }
-         System.out.println("???????????????????????? studyOID subjectOID" +subjectOID);
-        return subjectOID;
-    }
-
-    public static void main(String[] args) throws Exception {
-        IsStudySubject_ws isStudySubject_ws = new IsStudySubject_ws("testingStudy", "subjectID");
-        isStudySubject_ws.createSOAPRequest();
-        System.out.println("@@@@@@@@@@@@@" + isStudySubject_ws.getStudySubjectOID(isStudySubject_ws.createSOAPRequest()));
     }
 
 }

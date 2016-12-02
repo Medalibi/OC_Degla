@@ -9,7 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,6 +18,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.rdcit.ocSync.model.*;
+import org.rdcit.ocSync.ocws.ImportData_ws;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,18 +30,30 @@ import org.w3c.dom.Element;
 public class CompatibleODMXmlFileGenerateur {
 
     public List<Study> lStudy;
+     File file;
+     
 
     public CompatibleODMXmlFileGenerateur() {
         lStudy = new ArrayList();
+        file = new File("C:\\Users\\sa841\\Documents\\NetBeansProjects\\OC\\test.xml");
     }
 
-    public void generateOdmXmlFile() {
+    public String generateOdmXmlFile() {
         UpdateOIDs updateOIDs = new UpdateOIDs();
         CompatibleODMXmlFileGenerateur compatibleODMXmlFileGenerateur = new CompatibleODMXmlFileGenerateur();
         compatibleODMXmlFileGenerateur.lStudy = updateOIDs.updatelSourceDataStudy();
         compatibleODMXmlFileGenerateur.writeTheOdmXmlFile();
+        return "confirmation.xhtml";
     }
 
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+   
     /* public static void main(String[] args) {
         //   CollectingClinicalData collectingClinicalData = new CollectingClinicalData();
         // collectingClinicalData.collectingClinicalData();
@@ -54,7 +66,7 @@ public class CompatibleODMXmlFileGenerateur {
         compatibleODMXmlFileGenerateur.writeTheOdmXmlFile();
     }*/
     public File writeTheOdmXmlFile() {
-        File file = new File("C:\\Users\\sa841\\Documents\\NetBeansProjects\\OC\\test.xml");
+       // File file = new File("C:\\Users\\sa841\\Documents\\NetBeansProjects\\OC\\test.xml");
 
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -112,7 +124,8 @@ public class CompatibleODMXmlFileGenerateur {
                 }
                 rootElement.appendChild(clinicalData);
             }
-
+            ImportData_ws importData_ws = new ImportData_ws(doc);
+            importData_ws.createSOAPRequest();
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();

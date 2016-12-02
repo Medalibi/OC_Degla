@@ -7,17 +7,22 @@ package org.rdcit.ocSync.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author sa841
  */
+@ManagedBean( name = "StudyEvent")
 public class StudyEvent {
 
     String eventOID;
     String eventName;
     String eventRepeatingKey;
     List<StudyEventForm> lStudyEventForm;
+
+    public StudyEvent() {
+    }
 
     public StudyEvent(String eventOID, String eventRepeatingKey) {
         this.eventOID = eventOID;
