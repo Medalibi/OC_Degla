@@ -11,25 +11,34 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.rdcit.ocSync.model.Study;
+import org.rdcit.ocSync.model.Subject;
 import org.rdcit.ocSync.ocOdm.CollectingClinicalData;
 
 /**
  *
  * @author sa841
  */
-@ManagedBean (name = "StudyView")
+@ManagedBean(name = "StudyView")
 @ViewScoped
 public class StudySubjectView implements Serializable {
-   List<Study> lStudy;
+
+    List<Study> lStudy;
 
     public StudySubjectView() {
     }
-    
+
     @PostConstruct
-    public void init(){
-    CollectingClinicalData collectingClinicalData = new CollectingClinicalData();
-    lStudy = collectingClinicalData.collectingClinicalData();
-    System.out.println("@@@@@@@@@@@@@@@ lStudy Subject " + lStudy.size());
+    public void init() {
+        CollectingClinicalData collectingClinicalData = new CollectingClinicalData();
+        lStudy = collectingClinicalData.collectingClinicalData();
+        System.out.println("@@@@@@@@@@@@@@@ lStudy Subject " + lStudy.size());
+        for (int i = 0; i< lStudy.size(); i++) {
+            if (lStudy.get(i).getlSubject().isEmpty()) {
+                Subject subject = new Subject();
+                subject.setSubjectId("This study does not contains any clinical data subject.");
+                lStudy.get(i).addSubject(subject);
+            }
+        }
     }
 
     public List<Study> getlStudy() {
@@ -39,5 +48,5 @@ public class StudySubjectView implements Serializable {
     public void setlStudy(List<Study> lStudy) {
         this.lStudy = lStudy;
     }
-    
+
 }

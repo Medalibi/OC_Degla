@@ -35,7 +35,7 @@ public class FileDownloadView {
          StreamedContent download = null;
         try {
             download = new DefaultStreamedContent();
-            File file = new File("C:\\Users\\sa841\\Documents\\source_xml.xml");
+            File file = new File("C:\\Users\\sa841\\Documents\\NetBeansProjects\\OC\\StudyOCSync.xml");
             InputStream input = new FileInputStream(file);
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
             download = new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName());

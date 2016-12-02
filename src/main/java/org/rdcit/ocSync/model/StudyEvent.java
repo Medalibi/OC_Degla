@@ -75,9 +75,9 @@ public class StudyEvent {
         }
     }
 
-    @Override
+ /*   @Override
     public String toString() {
         return "StudyEvent{" + "eventOID=" + eventOID + " eventName=" + eventName + '}';
-    }
+    }*/
 
 }
