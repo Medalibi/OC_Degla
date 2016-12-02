@@ -5,58 +5,60 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>OC_Sync</title>
-            </f:facet>
-        </h:head>
-        <h:body>
-            <p:layout fullPage="true">
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">   
-                </p:layoutUnit>
-                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                    Footer
-                </p:layoutUnit>
-                <p:layoutUnit position="center">
-                    <h:form id="fStudy">      
-                        <p:tabView activeIndex="1" style="border:none" >
-                            <p:tab title="Study mapping" disabled="true"/>
-                            <p:tab title="Import Subjects"/>
-                            <p:tab title="Confirmation"  disabled="true"/>
-                        </p:tabView>
-                    </h:form> 
-                    <h:form>      
-                        <p:dataTable  style=" width: 60%; margin-left: 30px; margin-top: 50px;"  var="Study" value="#{StudyView.getlStudy()}" scrollable="false"  emptyMessage="there is no clinical data in this study. ">
-                            <p:column headerText="study OID">
-                                <h:outputText value="#{Study.study_oid}" />
-                            </p:column>
-                            <p:column headerText="Subject unique protocol ID">
-                                <p:dataTable  style="border: none;" id="dSubject" var="Subject" value="#{Study.getlSubject()}" scrollable="false"  emptyMessage="There no subjects to import in this study. ">
-                                    <p:column>
-                                        <h:outputText value="#{Subject.subjectId}"  />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form> 
-                    <h:form style="margin-left: 30px; margin-top:60px">
-                        <p:commandButton value="Confirm" ajax="false" action="#{CompatibleODMXmlFileGenerateur.generateOdmXmlFile()}"/>
-                    </h:form> 
-                </p:layoutUnit>
-                <p:layoutUnit position="west" size="175">   
-                    <h:form>
-                        <p:growl id="msgs" showDetail="true" widgetVar="ss"  autoUpdate="true"/>
-                        <p:dataTable var="Study" value="#{UserStudyList.getlStudy()}">
-                            <f:facet name="header">
-                                Select Study
-                            </f:facet>
-                            <p:column>
-                                <h:outputText value="#{Study.study_oid}" />
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
-                </p:layoutUnit>
-            </p:layout>
-        </h:body>
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>OC_Sync</title>
+        </f:facet>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">   
+            </p:layoutUnit>
+            <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                Footer
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <h:form id="fStudy">      
+                    <p:tabView activeIndex="1" style="border:none" >
+                        <p:tab title="Study mapping" disabled="true"/>
+                        <p:tab title="Import Subjects"/>
+                        <p:tab title="Confirmation"  disabled="true"/>
+                    </p:tabView>
+                </h:form> 
+                <h:form>      
+                    <p:dataTable  style=" width: 60%; margin-left: 30px; margin-top: 50px;"  var="Study" value="#{StudyView.getlStudy()}" scrollable="false"  emptyMessage="there is no clinical data in this study. ">
+                        <p:column headerText="study OID">
+                            <h:outputText value="#{Study.study_oid}" />
+                        </p:column>
+                        <p:column headerText="Subject unique protocol ID">
+                            <p:dataTable  style="border: none;" id="dSubject" var="Subject" value="#{Study.getlSubject()}" scrollable="false"  emptyMessage="There no subjects to import in this study. ">
+                                <p:column>
+                                    <h:outputText value="#{Subject.subjectId}"  />
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:dataTable>
+                </h:form> 
+                <h:form style="margin-left: 30px; margin-top:60px">
+                     <p:commandButton value="Go back" style="margin-right: 30px;"  ajax="false" action="index.xhtml"/>
+                    <p:commandButton value="Confirm" disabled="#{StudyView.disableConfirmButton}" ajax="false" action="#{CompatibleODMXmlFileGenerateur.generateOdmXmlFile()}"/>
+                  
+                </h:form> 
+            </p:layoutUnit>
+            <p:layoutUnit position="west" size="175">   
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" widgetVar="ss"  autoUpdate="true"/>
+                    <p:dataTable var="Study" value="#{UserStudyList.getlStudy()}">
+                        <f:facet name="header">
+                            Select Study
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{Study.study_oid}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
 </html>

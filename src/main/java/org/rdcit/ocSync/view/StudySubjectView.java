@@ -23,6 +23,7 @@ import org.rdcit.ocSync.ocOdm.CollectingClinicalData;
 public class StudySubjectView implements Serializable {
 
     List<Study> lStudy;
+    boolean disableConfirmButton;
 
     public StudySubjectView() {
     }
@@ -32,13 +33,16 @@ public class StudySubjectView implements Serializable {
         CollectingClinicalData collectingClinicalData = new CollectingClinicalData();
         lStudy = collectingClinicalData.collectingClinicalData();
         System.out.println("@@@@@@@@@@@@@@@ lStudy Subject " + lStudy.size());
-        for (int i = 0; i< lStudy.size(); i++) {
+        boolean disabled = false;
+        for (int i = 0; i < lStudy.size(); i++) {
             if (lStudy.get(i).getlSubject().isEmpty()) {
+                disabled = true;
                 Subject subject = new Subject();
                 subject.setSubjectId("This study does not contains any clinical data subject.");
                 lStudy.get(i).addSubject(subject);
             }
         }
+        setDisableConfirmButton(disabled);
     }
 
     public List<Study> getlStudy() {
@@ -47,6 +51,14 @@ public class StudySubjectView implements Serializable {
 
     public void setlStudy(List<Study> lStudy) {
         this.lStudy = lStudy;
+    }
+
+    public boolean isDisableConfirmButton() {
+        return disableConfirmButton;
+    }
+
+    public void setDisableConfirmButton(boolean disableConfirmButton) {
+        this.disableConfirmButton = disableConfirmButton;
     }
 
 }
